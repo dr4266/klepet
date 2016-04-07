@@ -1,8 +1,8 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  var jeSlika = sporocilo.search(new RegExp(/https?:\/\/(?!sandbox\.lavbic\.net\/teaching)\S+(.jpg|.png|.gif)/, 'g')) > -1;
+  var jeSlika = sporocilo.search(new RegExp(/https?:\/\/\S+(.jpg|.png|.gif)/, 'g')) > -1;
   if (jeSmesko || jeSlika) {
-    sporocilo = sporocilo.replace(/\<(?!img|div|\/div)/g, '&lt;').replace('&lt;img/g', '<img').replace('&lt;div/g', '<div').replace('&lt;\/div/g', '</div');
+    sporocilo = sporocilo.replace(/\<(?!img)/g, '&lt;');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
     }  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -55,11 +55,11 @@ function filtirirajVulgarneBesede(vhod) {
 }
 
 function addImages(sporocilo) {
-  var regex = new RegExp(/https?:\/\/(?!sandbox\.lavbic\.net\/teaching)\S+(.jpg|.png|.gif)/, 'g');
+  var regex = new RegExp(/https?:\/\/\S+(.jpg|.png|.gif)/, 'g');
   var slike = sporocilo.match(regex);
   if (slike != null)
     for (var i = 0; i<slike.length; i++) {
-      sporocilo += '<div style="margin: 0px 0px 0px 20px;"><img width="200px" src="' + slike[i] +'"></div>';
+      sporocilo += '<img style="margin: 0px 0px 0px 20px; display:block;" width="200px" src="' + slike[i] +'">';
     }
   return sporocilo;
   
