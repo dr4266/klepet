@@ -1,7 +1,8 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+  var jeVideo = sporocilo.search(new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S+)/, 'gi')) > -1;
+  if (jeSmesko || jeVideo) {
+    sporocilo = sporocilo = sporocilo.replace(/\<(?!img|iframe|\/iframe)/g, '&lt;');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -15,6 +16,7 @@ function divElementHtmlTekst(sporocilo) {
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
+  sporocilo = addVideo(sporocilo);
   var sistemskoSporocilo;
 
   if (sporocilo.charAt(0) == '/') {
@@ -52,6 +54,21 @@ function filtirirajVulgarneBesede(vhod) {
   return vhod;
 }
 
+function addVideo(sporocilo) {
+  var regex = new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S+)/, 'g');
+  var videi = [];
+  var video;
+  while ((video=regex.exec(sporocilo)) != null) {
+    videi.push(video[1]);
+  }
+  if (videi != null) {
+    console.log(videi.length);
+    for(var i=0; i<videi.length; i++) {
+      sporocilo += '<iframe src="https://www.youtube.com/embed/' + videi[i] + '" allowfullscreen style="width:200px; height:150px; display: block; margin: 0px 0px 0px 20px;"></iframe>'; 
+    }
+  }
+  return sporocilo;
+}
 $(document).ready(function() {
   var klepetApp = new Klepet(socket);
 
