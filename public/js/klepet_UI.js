@@ -1,9 +1,10 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+  var jeSlika = sporocilo.search(new RegExp(/https?:\/\/(?!sandbox\.lavbic\.net\/teaching)\S+(.jpg|.png|.gif)/, 'g')) > -1;
+  if (jeSmesko || jeSlika) {
+    sporocilo = sporocilo.replace(/\<(?!img|div|\/div)/g, '&lt;').replace('&lt;img/g', '<img').replace('&lt;div/g', '<div').replace('&lt;\/div/g', '</div');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+    }  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
@@ -14,6 +15,7 @@ function divElementHtmlTekst(sporocilo) {
 
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
+  sporocilo = addImages(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
 
@@ -50,6 +52,17 @@ function filtirirajVulgarneBesede(vhod) {
     });
   }
   return vhod;
+}
+
+function addImages(sporocilo) {
+  var regex = new RegExp(/https?:\/\/(?!sandbox\.lavbic\.net\/teaching)\S+(.jpg|.png|.gif)/, 'g');
+  var slike = sporocilo.match(regex);
+  if (slike != null)
+    for (var i = 0; i<slike.length; i++) {
+      sporocilo += '<div style="margin: 0px 0px 0px 20px;"><img width="200px" src="' + slike[i] +'"></div>';
+    }
+  return sporocilo;
+  
 }
 
 $(document).ready(function() {
