@@ -102,10 +102,11 @@ $(document).ready(function() {
   });
   
   socket.on('dregljaj', function(dregljaj) {
-    $('#vsebina').jrumble();
-    $('#vsebina').trigger('startRumble');
-    setTimeout(function(){ $('#vsebina').trigger('stopRumble'); }, 1500);
-    
+    if (dregljaj.dregljaj) {
+      $('#vsebina').jrumble();
+      $('#vsebina').trigger('startRumble');
+      setTimeout(function(){ $('#vsebina').trigger('stopRumble'); }, 1500);
+    }
   });
 
   setInterval(function() {
