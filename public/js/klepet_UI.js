@@ -1,6 +1,6 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  var jeVideo = sporocilo.search(new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S+)/, 'gi')) > -1;
+  var jeVideo = sporocilo.search(new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S{11})/, 'gi')) > -1;
   if (jeSmesko || jeVideo) {
     sporocilo = sporocilo = sporocilo.replace(/\<(?!img|iframe|\/iframe)/g, '&lt;');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
@@ -55,16 +55,15 @@ function filtirirajVulgarneBesede(vhod) {
 }
 
 function addVideo(sporocilo) {
-  var regex = new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S+)/, 'g');
+  var regex = new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S{11})/, 'g');
   var videi = [];
   var video;
   while ((video=regex.exec(sporocilo)) != null) {
     videi.push(video[1]);
   }
   if (videi != null) {
-    console.log(videi.length);
     for(var i=0; i<videi.length; i++) {
-      sporocilo += '<iframe src="https://www.youtube.com/embed/' + videi[i] + '" allowfullscreen style="width:200px; height:150px; display: block; margin: 0px 0px 0px 20px;"></iframe>'; 
+      sporocilo += "<iframe src='https://www.youtube.com/embed/" + videi[i] + "' allowfullscreen style='width:200px; height:150px; display: block; margin: 0px 0px 0px 20px;'></iframe>"; 
     }
   }
   return sporocilo;
