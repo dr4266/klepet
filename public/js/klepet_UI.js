@@ -56,7 +56,6 @@ function filtirirajVulgarneBesede(vhod) {
   return vhod;
 }
 
-<<<<<<< HEAD
 function addImages(sporocilo) {
   var regex = new RegExp(/https?:\/\/\S+(.jpg|.png|.gif)/, 'g');
   var slike = sporocilo.match(regex);
@@ -68,7 +67,6 @@ function addImages(sporocilo) {
   
 }
 
-=======
 function addVideo(sporocilo) {
   var regex = new RegExp(/(?:https:\/\/www\.youtube\.com\/watch\?v=)(\S{11})/, 'g');
   var videi = [];
@@ -83,7 +81,7 @@ function addVideo(sporocilo) {
   }
   return sporocilo;
 }
->>>>>>> youtube
+
 $(document).ready(function() {
   var klepetApp = new Klepet(socket);
 
